@@ -1,8 +1,15 @@
 import { Subject, merge } from "rxjs";
-import { startWith, scan, tap } from "rxjs/operators";
+import { startWith, scan, map } from "rxjs/operators";
 import { h, Component } from "./renderer";
 
-type CreateCounter = () => Component;
+type Actions = {
+  increment: () => void;
+  decrement: () => void;
+};
+
+type Store = number;
+
+type CreateCounter = () => Component<Actions, Store>;
 
 export const createCounter: CreateCounter = () => {
   const incrementSubject = new Subject<number>();
@@ -36,8 +43,11 @@ export const createCounter: CreateCounter = () => {
 
   const storeStream = merge(incrementSubject, decrementSubject).pipe(
     startWith(0),
-    scan((store, increment) => store + increment),
-    tap(clicks => {
+    scan((store, increment) => store + increment)
+  );
+
+  const viewStoreStream = storeStream.pipe(
+    map(clicks => {
       counterEl.innerHTML = clicks.toString();
     })
   );
@@ -45,6 +55,7 @@ export const createCounter: CreateCounter = () => {
   return {
     actions,
     storeStream,
+    viewStoreStream,
     getView
   };
 };

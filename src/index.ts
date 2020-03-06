@@ -1,10 +1,5 @@
 import { createCounter } from "./app";
-import { render } from "./renderer";
+import { render, getElementById } from "./renderer";
 
-const rootEl = document.getElementById("app");
-
-if (!rootEl) {
-  throw new Error("Missing rootEl.");
-}
-
+const rootEl = getElementById("root");
 render(createCounter(), rootEl);
