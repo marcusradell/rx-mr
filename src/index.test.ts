@@ -19,6 +19,6 @@ test("it works!", () => {
   counter.actions.increment();
 
   expect(rootEl.innerHTML).toEqual(
-    "<div><button>Inc</button><span>1</span><button>Dec</button></div>"
+    "<div><button>Increment</button><span>1</span><button>Decrement</button></div>"
   );
 });

@@ -23,21 +23,19 @@ export const createCounter: CreateCounter = () => {
     decrement
   };
 
-  const incButtonEl = h("button");
-  incButtonEl.textContent = "Inc";
-  incButtonEl.addEventListener("click", increment, false);
+  const incButtonEl = h("button", {
+    on: { click: increment },
+    text: "Increment"
+  });
 
-  const decButtonEl = h("button");
-  decButtonEl.textContent = "Dec";
-  decButtonEl.addEventListener("click", decrement, false);
+  const counterEl = h("span", { text: "" });
 
-  const counterEl = h("span");
+  const decButtonEl = h("button", {
+    on: { click: decrement },
+    text: "Decrement"
+  });
 
-  const el = h("div");
-
-  el.appendChild(incButtonEl);
-  el.appendChild(counterEl);
-  el.appendChild(decButtonEl);
+  const el = h("div", { children: [incButtonEl, counterEl, decButtonEl] });
 
   const getView = () => el;
 
