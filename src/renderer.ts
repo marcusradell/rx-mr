@@ -10,6 +10,7 @@ export type Component<TActions, TStore> = {
 type Render = (c: Component<unknown, unknown>, parentEl: HTMLElement) => void;
 
 export const render: Render = (c, parentEl) => {
+  // This is just something that works well enough right now. I have not checked perf.
   parentEl.innerHTML = "";
   parentEl.appendChild(c.getView());
   c.viewStoreStream.subscribe({
