@@ -35,7 +35,7 @@ export const createCounter: CreateCounter = () => {
     text: "Decrement"
   });
 
-  const el = h("div", { children: [incButtonEl, counterEl, decButtonEl] });
+  const el = h("div", { children: [decButtonEl, counterEl, incButtonEl] });
 
   const getView = () => el;
 
