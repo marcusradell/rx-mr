@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.html",
   "scripts": {
+    "dev": "parcel index.html",
     "test": "jest"
   },
   "keywords": [],
