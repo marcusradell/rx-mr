@@ -2,4 +2,9 @@ import { createCounter } from "./app";
 import { render, getElementById } from "./renderer";
 
 const rootEl = getElementById("root");
-render(createCounter(), rootEl);
+
+const counter = createCounter();
+
+(window as any).app = counter;
+
+render(counter, rootEl);

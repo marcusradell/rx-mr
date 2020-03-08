@@ -1,5 +1,5 @@
 import { Subject, merge } from "rxjs";
-import { startWith, scan, map } from "rxjs/operators";
+import { startWith, scan, tap, shareReplay } from "rxjs/operators";
 import { h, Component } from "./renderer";
 
 type Actions = {
@@ -41,11 +41,12 @@ export const createCounter: CreateCounter = () => {
 
   const storeStream = merge(incrementSubject, decrementSubject).pipe(
     startWith(0),
-    scan((store, increment) => store + increment)
+    scan((store, increment) => store + increment),
+    shareReplay(1)
   );
 
   const viewStoreStream = storeStream.pipe(
-    map(clicks => {
+    tap(clicks => {
       counterEl.innerHTML = clicks.toString();
     })
   );
