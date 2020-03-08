@@ -62,21 +62,17 @@ type H = (tag: string, content: HContent) => HTMLElement;
 export const h: H = (tag, content) => {
   const el = document.createElement(tag);
 
-  if (content.on !== undefined) {
-    // TODO: TypeScript doesn't get what type the keys are *AND* it forgets that content.on is not undefined. Sigh.
-    Object.keys(content.on).forEach(eventName =>
-      el.addEventListener(
-        eventName as keyof HEvents,
-        (content.on as HEvents)[eventName as keyof HEvents],
-        false
-      )
+  const events = content.on;
+
+  if (events !== undefined) {
+    ((Object.keys(events) as unknown) as (keyof HEvents)[]).forEach(eventName =>
+      el.addEventListener(eventName, events[eventName], false)
     );
   }
 
-  // TODO: Figure out why doesn't typescript get the type and fix it.
-  if (content.hasOwnProperty("text")) {
-    return hLeaf(el, content as HLeafContent);
+  if ("text" in content) {
+    return hLeaf(el, content);
   }
 
-  return hNode(el, content as HNodeContent);
+  return hNode(el, content);
 };
