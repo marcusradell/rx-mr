@@ -9,19 +9,39 @@ export type CreateViewStream = (
 ) => Observable<HTMLElement>;
 
 export const createViewStream: CreateViewStream = (actions, storeStream) => {
-  const incButtonEl = h("button", {
-    on: { click: actions.increment },
-    text: "Increment"
-  });
+  const incButtonEl = h(
+    "button",
+    {
+      on: { click: actions.increment },
+      text: "Increment"
+    },
+    {
+      style: "font-size: 2rem; margin: 0.25rem; display: block;"
+    }
+  );
 
-  const counterEl = h("span", { text: "-" });
+  const counterEl = h(
+    "span",
+    {
+      text: "-"
+    },
+    {
+      style: "font-size: 2rem; margin: 0.25rem; display: block;"
+    }
+  );
 
-  const decButtonEl = h("button", {
-    on: { click: actions.decrement },
-    text: "Decrement"
-  });
+  const decButtonEl = h(
+    "button",
+    {
+      on: { click: actions.decrement },
+      text: "Decrement"
+    },
+    {
+      style: "font-size: 2rem; margin: 0.25rem; display: block;"
+    }
+  );
 
-  const el = h("div", { children: [decButtonEl, counterEl, incButtonEl] });
+  const el = h("div", { children: [incButtonEl, counterEl, decButtonEl] });
 
   return concat(
     of(el),

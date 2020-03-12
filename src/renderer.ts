@@ -51,9 +51,13 @@ const hNode: HNode = (el, content) => {
 
 type HContent = HLeafContent | HNodeContent;
 
-type H = (tag: string, content: HContent) => HTMLElement;
+type H = (
+  tag: string,
+  content: HContent,
+  attrs?: { [s: string]: string }
+) => HTMLElement;
 
-export const h: H = (tag, content) => {
+export const h: H = (tag, content, attrs) => {
   const el = document.createElement(tag);
 
   const events = content.on;
@@ -62,6 +66,10 @@ export const h: H = (tag, content) => {
     ((Object.keys(events) as unknown) as (keyof HEvents)[]).forEach(eventName =>
       el.addEventListener(eventName, events[eventName], false)
     );
+  }
+
+  if (attrs) {
+    Object.keys(attrs).forEach(attr => el.setAttribute(attr, attrs[attr]));
   }
 
   if ("text" in content) {
