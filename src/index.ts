@@ -1,4 +1,4 @@
-import { createCounter } from "./app";
+import { createCounter } from "./counter";
 import { render, getElementById } from "./renderer";
 
 const rootEl = getElementById("root");

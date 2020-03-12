@@ -2,14 +2,14 @@ import { Observable } from "rxjs";
 
 export type Component<TActions, TStore> = {
   actions: TActions;
-  getViewStream: () => Observable<HTMLElement>;
+  viewStream: Observable<HTMLElement>;
   storeStream: Observable<TStore>;
 };
 
 type Render = (c: Component<unknown, unknown>, parentEl: HTMLElement) => void;
 
 export const render: Render = (c, parentEl) => {
-  c.getViewStream().forEach(el => {
+  c.viewStream.forEach(el => {
     parentEl.innerHTML = "";
     parentEl.appendChild(el);
   });
