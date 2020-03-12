@@ -1,5 +1,12 @@
-import { Subject, merge } from "rxjs";
-import { startWith, scan, tap, shareReplay } from "rxjs/operators";
+import { Subject, merge, concat, of } from "rxjs";
+import {
+  startWith,
+  scan,
+  tap,
+  shareReplay,
+  filter,
+  mapTo
+} from "rxjs/operators";
 import { h, Component } from "./renderer";
 
 type Actions = {
@@ -23,21 +30,33 @@ export const createCounter: CreateCounter = () => {
     decrement
   };
 
-  const incButtonEl = h("button", {
-    on: { click: increment },
-    text: "Increment"
-  });
+  const getViewStream = () => {
+    const incButtonEl = h("button", {
+      on: { click: increment },
+      text: "Increment"
+    });
 
-  const counterEl = h("span", { text: "" });
+    const counterEl = h("span", { text: "" });
 
-  const decButtonEl = h("button", {
-    on: { click: decrement },
-    text: "Decrement"
-  });
+    const decButtonEl = h("button", {
+      on: { click: decrement },
+      text: "Decrement"
+    });
 
-  const el = h("div", { children: [decButtonEl, counterEl, incButtonEl] });
+    const el = h("div", { children: [decButtonEl, counterEl, incButtonEl] });
 
-  const getView = () => el;
+    return concat(
+      of(el),
+      storeStream.pipe(
+        tap(clicks => {
+          counterEl.innerHTML = clicks.toString();
+        }),
+        filter(() => false),
+        // Not needed since we filter everything out, but fixes typescript type error.
+        mapTo(el)
+      )
+    );
+  };
 
   const storeStream = merge(incrementSubject, decrementSubject).pipe(
     startWith(0),
@@ -45,16 +64,9 @@ export const createCounter: CreateCounter = () => {
     shareReplay(1)
   );
 
-  const viewStoreStream = storeStream.pipe(
-    tap(clicks => {
-      counterEl.innerHTML = clicks.toString();
-    })
-  );
-
   return {
     actions,
     storeStream,
-    viewStoreStream,
-    getView
+    getViewStream
   };
 };

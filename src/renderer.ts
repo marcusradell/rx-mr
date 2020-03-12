@@ -2,22 +2,16 @@ import { Observable } from "rxjs";
 
 export type Component<TActions, TStore> = {
   actions: TActions;
-  getView: () => HTMLElement;
+  getViewStream: () => Observable<HTMLElement>;
   storeStream: Observable<TStore>;
-  viewStoreStream: Observable<unknown>;
 };
 
 type Render = (c: Component<unknown, unknown>, parentEl: HTMLElement) => void;
 
 export const render: Render = (c, parentEl) => {
-  // This is just something that works well enough right now. I have not checked perf.
-  parentEl.innerHTML = "";
-  parentEl.appendChild(c.getView());
-  c.viewStoreStream.subscribe({
-    error: error => {
-      // TODO: Test this.
-      throw error;
-    }
+  c.getViewStream().forEach(el => {
+    parentEl.innerHTML = "";
+    parentEl.appendChild(el);
   });
 };
 
